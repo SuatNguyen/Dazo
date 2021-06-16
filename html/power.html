@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+
+  <style>
+    .chart {
+      min-width: 310px;
+      max-width: 1200px;
+      height: 600px;
+      margin: 0 auto;
+    }
+  </style>
+  <link rel="stylesheet" href="mystyles.css">
+</head>
+<body>
+
+	<nav>
+                <ul>
+                        <li><a href="index.html">Home</a></li>
+
+		</ul>
+        </nav>
+
+
+	<main>
+    <div id="chart1" class="chart"></div>
+    <div id="chart2" class="chart"></div>
+    <div id="chart3" class="chart"></div>
+    <div id="chart4" class="chart"></div>
+  </main>
+  <script src="https://code.highcharts.com/highcharts.js"></script>
+  <script src="https://code.highcharts.com/modules/data.js"></script>
+  <script src="https://code.highcharts.com/modules/exporting.js"></script>
+
+  <script>	
+	[1].forEach((column) => {
+      Highcharts.chart(`chart${column}`, {
+        chart: {
+          type: "line",
+		  zoomType: 'x',
+          height: 600
+        },
+		yAxis: {
+            title: {
+                text: 'W'
+            },
+		},
+        title: {
+          text: "Live Plug"
+        },
+        data: {
+          csvURL: window.location.origin + "/plug.csv",
+          itemDelimiter: " ",
+          enablePolling: true,
+          dataRefreshRate: 1,
+          parsed: function (columns) {		             
+			      // We only want the first column, which is the timestamp, and the nth column as data.
+            let count = columns.length;
+            while (count--) {
+              if (count > 0 && count !== 1) {
+                columns.splice(count, 1);
+              }
+            }
+          }
+        },
+      });
+    });
+  </script>
+</body>
+</html>
+
